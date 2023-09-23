@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .egg {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin: 5px;
+        width: 100px;
+        height: 100px;
+      }
+
+      .egg-title-span {
+        width: 100%;
+        text-align: center;
+        color: white;
+        margin-bottom: -50px;
+      }
+
+      .egg-weight-text {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin-top: -35px;
+        width: 100px;
+        height: 100px;
+        color: rgb(250, 148, 148);
+      }
+
+      .eggInWeight {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin: 5px;
+        width: 80px;
+        height: 80px;
+      }
+
+      .eggInWeight-title-span {
+        width: 100%;
+        text-align: center;
+        color: white;
+        margin-bottom: -50px;
+        font-size: 13px;
+      }
+
+      .eggInWeight-weight-text {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin-top: -30px;
+        width: 80px;
+        height: 80px;
+        color: rgb(250, 148, 148);
+      }
+
+      .eggInWeight-two {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin: 5px;
+        width: 66px;
+        height: 66px;
+      }
+
+      .eggInWeight-title-span-two {
+        width: 100%;
+        text-align: center;
+        color: white;
+        margin-bottom: -33px;
+        font-size: 11px;
+      }
+
+      .eggInWeight-weight-text-two {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin-top: -21px;
+        width: 60px;
+        height: 60px;
+        color: rgb(250, 148, 148);
+      }
+
+      .blue-egg {
+        background-color: blue;
+      }
+
+      .green-egg {
+        background-color: green;
+      }
+
+      .basket-box {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        background: linear-gradient(to bottom, #ee9fa2, #f9f2cd);
+      }
+
+      .versus-text {
+        margin-top: -30px;
+        font-style: italic;
+      }
+
+      .versus-text-test-two {
+        font-style: italic;
+        color: black;
+      }
+
+      .first-test-text {
+        margin: 5px;
+        font-weight: normal;
+      }
+
+      body {
+        background-color: rgb(211, 211, 249);
+      }
+      button {
+        display: inline-block;
+        outline: 0;
+        cursor: pointer;
+        padding: 5px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+        vertical-align: middle;
+        border: 1px solid;
+        border-radius: 6px;
+        color: #ffffff;
+        background-color: #7b2ea4;
+        border-color: #1b1f2326;
+        box-shadow: rgba(27, 31, 35, 0.04) 0px 1px 0px 0px,
+          rgba(255, 255, 255, 0.25) 0px 1px 0px 0px inset;
+        transition: 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+        transition-property: color, background-color, border-color;
+        :hover {
+          background-color: #2c974b;
+          border-color: #1b1f2326;
+          transition-duration: 0.1s;
+        }
+      }
+    </style>
+  </head>
+  <title>EGG PROGRAM</title>
+  <body>
+    <h1>EGG PROBLEM</h1>
+    <p>EGG BASKET</p>
+    <div className="basket-box">
+      <div id="eggBasket"></div>
+      <br />
+      <button id="shuffleBasket">Shuffle Basket</button>
+      <button id="weighEggs">Two Step Solution</button>
+      <br />
+      <br />
+      <div className="flex-weight">
+        <div id="firstTest"></div>
+        <br />
+        <div id="secondTest"></div>
+        <div id="finalSolution"></div>
+      </div>
+    </div>
+    <script>
+
+      // initialize the eggBasket object
+      const eggBasket = {};
+
+      // subGroup egg arrays and weifght
+      let groupOne = [];
+      let groupTwo = [];
+      let groupThree = [];
+      let groupOneTotalWeight = 0;
+      let groupTwoTotalWeight = 0;
+
+      let disableButton = false;
+
+      // Create Initial Random Egg offering
+      const generateEggBasket = () => {
+        // add 9 eggs all equal weight
+        for (let i = 1; i <= 9; i++) {
+          eggBasket["e" + i] = {
+            name: "Egg" + " " + i,
+            weight: 5,
+          };
+        }
+
+        // modify random deviant egg weight to basket
+        let randomIndex = Math.floor(Math.random() * 9);
+        let modifiedRandoE = Object.keys(eggBasket)[randomIndex];
+        eggBasket[modifiedRandoE].weight = 4;
+      };
+
+      generateEggBasket();
+
+      // shuffle eggBasket function
+
+      const shuffleEggs = () => {
+
+        disableButton = false;
+
+        // Get all of the eggDiv elements from the DOM
+        const eggDivs = document.querySelectorAll(".egg");
+
+        const eggWeightDivs = document.querySelectorAll(".eggInWeight");
+        const eggWeightDivsTwo = document.querySelectorAll(".eggInWeight-two");
+        const weightVersusText = document.querySelectorAll(".versus-text");
+        const weightVersusTextTwo = document.querySelectorAll(
+          ".versus-text-test-two"
+        );
+        const firstResultText = document.querySelectorAll(".first-test-text");
+        // reset group weights
+        groupOneTotalWeight = 0;
+        groupTwoTotalWeight = 0;
+
+        // remove versus text when re-shuffling
+        if (weightVersusText) {
+          weightVersusText.forEach((vText) => {
+            vText.remove();
+          });
+        }
+        // remove versus text when re-shuffling
+        if (weightVersusTextTwo) {
+          weightVersusTextTwo.forEach((vText) => {
+            vText.remove();
+          });
+        }
+        // remove versus text when re-shuffling
+        if (firstResultText) {
+          firstResultText.forEach((text) => text.remove());
+        }
+
+        // Remove all egg group divs if they exist
+        if (eggWeightDivs.length > 0) {
+          // Remove all existing eggDivs
+          eggWeightDivs.forEach((eggWeightDiv) => {
+            eggWeightDiv.remove();
+          });
+        }
+
+        // Remove all egg group divs if they exist
+        if (eggWeightDivsTwo.length > 0) {
+          // Remove all existing eggDivs
+          eggWeightDivsTwo.forEach((eggWeightDiv) => {
+            eggWeightDiv.remove();
+          });
+        }
+        // reset egg groups to zero
+        groupOne = [];
+        groupTwo = [];
+        groupThree = [];
+
+        // reshuffle the egg basket
+        generateEggBasket();
+
+        // log the updated basket
+        console.log(eggBasket);
+
+        // Update the colors and weight of the eggDiv elements
+        for (const eggDiv of eggDivs) {
+          const egg = eggDiv.getAttribute("data-egg-id");
+          const eggWeightPTag = eggDiv.querySelector(".egg-weight-text");
+          eggWeightPTag.textContent = " " + eggBasket[egg].weight + " Lbs";
+          if (eggBasket[egg].weight === 5) {
+            eggDiv.classList.add("blue-egg");
+            eggDiv.classList.remove("green-egg");
+          } else {
+            eggDiv.classList.add("green-egg");
+            eggDiv.classList.remove("blue-egg");
+          }
+        }
+      };
+
+      // weigh random eggs selection by groups of 3 function
+      const weighRandomEggs = (obj) => {
+
+        if(disableButton === true) return alert('You already have the solution. You can only run the tests again by shuffling the eggs or refreshing the page. P.S. You are cute.')
+
+        let randEggs = [];
+        let checkDups = new Set();
+
+        let i = 0;
+
+        // add eggs initial 6 for weight machine
+        while (randEggs.length < 6) {
+          randomIndex = Math.floor(Math.random() * 9);
+          randomEgg = Object.keys(obj)[randomIndex];
+          if (!checkDups.has(obj[randomEgg])) {
+            checkDups.add(obj[randomEgg]);
+            randEggs.push(obj[randomEgg]);
+          }
+          //  i++;
+        }
+
+        // separate third group
+        while (groupThree.length < 3) {
+          randomIndex = Math.floor(Math.random() * 9);
+          randomEgg = Object.keys(obj)[randomIndex];
+          if (!checkDups.has(obj[randomEgg])) {
+            checkDups.add(obj[randomEgg]);
+            groupThree.push(obj[randomEgg]);
+          }
+          //  i++;
+        }
+
+        console.log("rand eggs", randEggs);
+
+        // separate groupOne
+        for (let i = 0; i < 3; i++) {
+          groupOne.push(randEggs[i]);
+        }
+
+        // separate groupTwo
+        for (let i = 3; i < 6; i++) {
+          groupTwo.push(randEggs[i]);
+        }
+
+        console.log(groupOne, groupTwo, groupThree);
+
+        const eggGroupVOne = document.getElementById("firstTest");
+
+        // visually display egg groups in weight machine
+        for (const egg in groupOne) {
+          const eggDiv = document.createElement("div");
+          const eggTitleSpan = document.createElement("span");
+          const eggWeightPTag = document.createElement("p");
+          groupOneTotalWeight += groupOne[egg].weight;
+          eggDiv.classList.add("eggInWeight");
+          eggDiv.setAttribute("data-egg-id", egg);
+          eggTitleSpan.classList.add("eggInWeight-title-span");
+          eggWeightPTag.classList.add("eggInWeight-weight-text");
+          console.log("groupOne", groupOne[egg]);
+          eggTitleSpan.textContent = groupOne[egg].name;
+          eggWeightPTag.textContent = " " + groupOne[egg].weight + " Lbs";
+          if (groupOne[egg].weight === 5) {
+            eggDiv.classList.add("blue-egg");
+            eggDiv.classList.remove("green-egg");
+          } else {
+            eggDiv.classList.add("green-egg");
+            eggDiv.classList.remove("blue-egg");
+          }
+          eggGroupVOne.appendChild(eggDiv);
+          eggDiv.append(eggTitleSpan);
+          eggTitleSpan.appendChild(eggWeightPTag);
+        }
+
+        // add versus text
+        const eggVersusSpan = document.createElement("span");
+        eggVersusSpan.classList.add("versus-text");
+        eggVersusSpan.textContent = " versus ";
+        eggGroupVOne.appendChild(eggVersusSpan);
+
+        // visually display egg groups in weight machine
+
+        const eggGroupVTwo = document.getElementById("firstTest");
+
+        for (const egg in groupTwo) {
+          const eggDiv = document.createElement("div");
+          const eggTitleSpan = document.createElement("span");
+          const eggWeightPTag = document.createElement("p");
+
+          groupTwoTotalWeight += groupTwo[egg].weight;
+
+          eggDiv.classList.add("eggInWeight");
+          eggDiv.setAttribute("data-egg-id", egg);
+          eggTitleSpan.classList.add("eggInWeight-title-span");
+          eggWeightPTag.classList.add("eggInWeight-weight-text");
+          eggTitleSpan.textContent = groupTwo[egg].name;
+          eggWeightPTag.textContent = " " + groupTwo[egg].weight + " Lbs";
+          if (groupTwo[egg].weight === 5) {
+            eggDiv.classList.add("blue-egg");
+            eggDiv.classList.remove("green-egg");
+          } else {
+            eggDiv.classList.add("green-egg");
+            eggDiv.classList.remove("blue-egg");
+          }
+          eggGroupVTwo.appendChild(eggDiv);
+          eggDiv.append(eggTitleSpan);
+          eggTitleSpan.appendChild(eggWeightPTag);
+        }
+
+        // add versus text
+        const eggVersusSpanTwo = document.createElement("span");
+        eggVersusSpanTwo.classList.add("versus-text");
+        eggVersusSpanTwo.textContent = " versus ";
+        eggGroupVTwo.appendChild(eggVersusSpanTwo);
+
+        // visually display egg groups in weight machine
+
+        const eggGroupVThree = document.getElementById("firstTest");
+
+        for (const egg in groupThree) {
+          const eggDiv = document.createElement("div");
+          const eggTitleSpan = document.createElement("span");
+          const eggWeightPTag = document.createElement("p");
+
+          eggDiv.classList.add("eggInWeight");
+          eggDiv.setAttribute("data-egg-id", egg);
+          eggTitleSpan.classList.add("eggInWeight-title-span");
+          eggWeightPTag.classList.add("eggInWeight-weight-text");
+          eggTitleSpan.textContent = groupThree[egg].name;
+          eggWeightPTag.textContent = " " + groupThree[egg].weight + " Lbs";
+          if (groupThree[egg].weight === 5) {
+            eggDiv.classList.add("blue-egg");
+            eggDiv.classList.remove("green-egg");
+          } else {
+            eggDiv.classList.add("green-egg");
+            eggDiv.classList.remove("blue-egg");
+          }
+          eggGroupVThree.appendChild(eggDiv);
+          eggDiv.append(eggTitleSpan);
+          eggTitleSpan.appendChild(eggWeightPTag);
+        }
+
+        // add first test result text
+        const firstTestResult = document.createElement("p");
+        firstTestResult.classList.add("first-test-text");
+        console.log(groupOneTotalWeight, groupTwoTotalWeight);
+        if (groupOneTotalWeight > groupTwoTotalWeight) {
+          firstTestResult.textContent = `The first group of eggs weighs ${groupOneTotalWeight}lbs
+          whereas the second weighs ${groupTwoTotalWeight}lbs therefore the
+          egg must reside in group two since it weighs less.`;
+          eggGroupVTwo.appendChild(firstTestResult);
+        } else {
+          if (groupOneTotalWeight < groupTwoTotalWeight) {
+            firstTestResult.textContent = `The first group of eggs weighs ${groupOneTotalWeight}lbs
+          whereas the second group weighs ${groupTwoTotalWeight}lbs therefore the
+          egg must reside in group one since it weighs less.`;
+            eggGroupVTwo.appendChild(firstTestResult);
+          } else {
+            if (groupOneTotalWeight === groupTwoTotalWeight) {
+              firstTestResult.textContent = `Both groups one and two weigh ${groupOneTotalWeight}lbs therefore the
+          egg must reside in group three since these groups weigh the same.`;
+              eggGroupVTwo.appendChild(firstTestResult);
+            }
+          }
+        }
+
+        // Second weight test based on the first test results
+        if (groupOneTotalWeight === groupTwoTotalWeight) {
+          const eggGroupVFinal = document.getElementById("secondTest");
+
+          let counterVersus = 0;
+
+          for (const egg in groupThree) {
+            counterVersus++;
+            const eggDiv = document.createElement("div");
+            const eggTitleSpan = document.createElement("span");
+            const eggWeightPTag = document.createElement("p");
+            const versusText = document.createElement("span");
+            eggDiv.classList.add("eggInWeight-two");
+            eggDiv.setAttribute("data-egg-id", egg);
+            versusText.classList.add("versus-text-test-two");
+            versusText.textContent = " versus ";
+            eggTitleSpan.classList.add("eggInWeight-title-span-two");
+            eggWeightPTag.classList.add("eggInWeight-weight-text-two");
+            eggTitleSpan.textContent = groupThree[egg].name;
+            eggWeightPTag.textContent = " " + groupThree[egg].weight + " Lbs";
+            if (groupThree[egg].weight === 5) {
+              eggDiv.classList.add("blue-egg");
+              eggDiv.classList.remove("green-egg");
+            } else {
+              eggDiv.classList.add("green-egg");
+              eggDiv.classList.remove("blue-egg");
+            }
+            eggGroupVFinal.appendChild(eggDiv);
+            eggDiv.append(eggTitleSpan);
+            eggTitleSpan.appendChild(eggWeightPTag);
+            if (counterVersus < 3) {
+              eggGroupVFinal.appendChild(versusText);
+            }
+          }
+
+          if (groupThree[0].weight > groupThree[1].weight) {
+            const finalSolutionText = document.getElementById("finalSolution");
+            const solutionText = document.createElement("p");
+            solutionText.classList.add("first-test-text");
+            solutionText.textContent = `Since ${groupThree[0].name}'s weight
+                    is greater than ${groupThree[1].name} the egg with a deviance in weight is ${groupThree[1].name}`;
+            finalSolutionText.appendChild(solutionText);
+          } else if (groupThree[0].weight < groupThree[1].weight) {
+            const finalSolutionText = document.getElementById("finalSolution");
+            const eggGroupVFinal = document.getElementById("secondTest");
+            const solutionText = document.createElement("p");
+            solutionText.classList.add("first-test-text");
+            solutionText.textContent = `Since ${groupThree[0].name}'s weight
+                    is less than ${groupThree[1].name} the egg with a deviance in weight is ${groupThree[0].name}`;
+            finalSolutionText.appendChild(solutionText);
+          } else if (groupThree[0].weight === groupThree[1].weight) {
+            const finalSolutionText = document.getElementById("finalSolution");
+            const eggGroupVFinal = document.getElementById("secondTest");
+            const solutionText = document.createElement("p");
+            solutionText.classList.add("first-test-text");
+            solutionText.textContent = `Since ${groupThree[0].name}'s weight
+                    is equal to ${groupThree[1].name} the egg with a deviance in weight is ${groupThree[2].name}`;
+            finalSolutionText.appendChild(solutionText);
+          }
+          // if group one is greater than group two run the last test
+        } else if (groupOneTotalWeight > groupTwoTotalWeight) {
+          const eggGroupVFinal = document.getElementById("secondTest");
+
+          let counterVersus = 0;
+
+          for (const egg in groupTwo) {
+            counterVersus++;
+            const eggDiv = document.createElement("div");
+            const eggTitleSpan = document.createElement("span");
+            const eggWeightPTag = document.createElement("p");
+            const versusText = document.createElement("span");
+            eggDiv.classList.add("eggInWeight-two");
+            eggDiv.setAttribute("data-egg-id", egg);
+            versusText.classList.add("versus-text-test-two");
+            versusText.textContent = " versus ";
+            eggTitleSpan.classList.add("eggInWeight-title-span-two");
+            eggWeightPTag.classList.add("eggInWeight-weight-text-two");
+            eggTitleSpan.textContent = groupTwo[egg].name;
+            eggWeightPTag.textContent = " " + groupTwo[egg].weight + " Lbs";
+            if (groupTwo[egg].weight === 5) {
+              eggDiv.classList.add("blue-egg");
+              eggDiv.classList.remove("green-egg");
+            } else {
+              eggDiv.classList.add("green-egg");
+              eggDiv.classList.remove("blue-egg");
+            }
+            eggGroupVFinal.appendChild(eggDiv);
+            eggDiv.append(eggTitleSpan);
+            eggTitleSpan.appendChild(eggWeightPTag);
+            if (counterVersus < 3) {
+              eggGroupVFinal.appendChild(versusText);
+            }
+          }
+
+          if (groupTwo[0].weight > groupTwo[1].weight) {
+            const finalSolutionText = document.getElementById("finalSolution");
+            const solutionText = document.createElement("p");
+            solutionText.classList.add("first-test-text");
+            solutionText.textContent = `Since ${groupTwo[0].name}'s weight
+            is greater than ${groupTwo[1].name} the egg with a deviance in weight is ${groupThree[1].name}`;
+            finalSolutionText.appendChild(solutionText);
+          } else if (groupTwo[0].weight < groupTwo[1].weight) {
+            const finalSolutionText = document.getElementById("finalSolution");
+            const eggGroupVFinal = document.getElementById("secondTest");
+            const solutionText = document.createElement("p");
+            solutionText.classList.add("first-test-text");
+            solutionText.textContent = `Since ${groupTwo[0].name}'s weight
+            is less than ${groupTwo[1].name} the egg with a deviance in weight is ${groupTwo[0].name}`;
+            finalSolutionText.appendChild(solutionText);
+          } else if (groupTwo[0].weight === groupTwo[1].weight) {
+            const finalSolutionText = document.getElementById("finalSolution");
+            const eggGroupVFinal = document.getElementById("secondTest");
+            const solutionText = document.createElement("p");
+            solutionText.classList.add("first-test-text");
+            solutionText.textContent = `Since ${groupTwo[0].name}'s weight
+            is equal to ${groupTwo[1].name} the egg with a deviance in weight is ${groupTwo[2].name}`;
+            finalSolutionText.appendChild(solutionText);
+          }
+
+          // if group one is less than group two run the last test
+        } else if (groupOneTotalWeight < groupTwoTotalWeight) {
+          const eggGroupVFinal = document.getElementById("secondTest");
+
+          let counterVersus = 0;
+
+          for (const egg in groupOne) {
+            counterVersus++;
+            const eggDiv = document.createElement("div");
+            const eggTitleSpan = document.createElement("span");
+            const eggWeightPTag = document.createElement("p");
+            const versusText = document.createElement("span");
+            eggDiv.classList.add("eggInWeight-two");
+            eggDiv.setAttribute("data-egg-id", egg);
+            versusText.classList.add("versus-text-test-two");
+            versusText.textContent = " versus ";
+            eggTitleSpan.classList.add("eggInWeight-title-span-two");
+            eggWeightPTag.classList.add("eggInWeight-weight-text-two");
+            eggTitleSpan.textContent = groupOne[egg].name;
+            eggWeightPTag.textContent = " " + groupOne[egg].weight + " Lbs";
+            if (groupOne[egg].weight === 5) {
+              eggDiv.classList.add("blue-egg");
+              eggDiv.classList.remove("green-egg");
+            } else {
+              eggDiv.classList.add("green-egg");
+              eggDiv.classList.remove("blue-egg");
+            }
+            eggGroupVFinal.appendChild(eggDiv);
+            eggDiv.append(eggTitleSpan);
+            eggTitleSpan.appendChild(eggWeightPTag);
+            if (counterVersus < 3) {
+              eggGroupVFinal.appendChild(versusText);
+            }
+          }
+
+          if (groupOne[0].weight > groupOne[1].weight) {
+            const finalSolutionText = document.getElementById("finalSolution");
+            const solutionText = document.createElement("p");
+            solutionText.classList.add("first-test-text");
+            solutionText.textContent = `Since ${groupOne[0].name}'s weight
+            is greater than ${groupOne[1].name} the egg with a deviance in weight is ${groupOne[1].name}`;
+            finalSolutionText.appendChild(solutionText);
+          } else if (groupOne[0].weight < groupOne[1].weight) {
+            const finalSolutionText = document.getElementById("finalSolution");
+            const eggGroupVFinal = document.getElementById("secondTest");
+            const solutionText = document.createElement("p");
+            solutionText.classList.add("first-test-text");
+            solutionText.textContent = `Since ${groupOne[0].name}'s weight
+            is less than ${groupOne[1].name} the egg with a deviance in weight is ${groupTwo[0].name}`;
+            finalSolutionText.appendChild(solutionText);
+          } else if (groupOne[0].weight === groupOne[1].weight) {
+            const finalSolutionText = document.getElementById("finalSolution");
+            const eggGroupVFinal = document.getElementById("secondTest");
+            const solutionText = document.createElement("p");
+            solutionText.classList.add("first-test-text");
+            solutionText.textContent = `Since ${groupOne[0].name}'s weight
+            is equal to ${groupOne[1].name} the egg with a deviance in weight is ${groupOne[2].name}`;
+            finalSolutionText.appendChild(solutionText);
+          }
+        }
+        disableButton = true;
+
+      };
+      // DOM INTERACTIONS
+
+      // Add event listeners
+      document.getElementById("shuffleBasket").addEventListener("click", () => {
+        shuffleEggs();
+      });
+
+      document.getElementById("weighEggs").addEventListener("click", () => {
+        weighRandomEggs(eggBasket);
+      });
+
+      // propagate visualizations of the Eggs
+      const eggBasketDiv = document.getElementById("eggBasket");
+
+      // Add color divs to the eggs
+      for (const egg in eggBasket) {
+        const eggDiv = document.createElement("div");
+        const eggTitleSpan = document.createElement("span");
+        const eggWeightPTag = document.createElement("p");
+
+        eggDiv.classList.add("egg");
+        eggDiv.setAttribute("data-egg-id", egg);
+        eggTitleSpan.classList.add("egg-title-span");
+        eggWeightPTag.classList.add("egg-weight-text");
+        eggTitleSpan.textContent = eggBasket[egg].name;
+        eggWeightPTag.textContent = " " + eggBasket[egg].weight + " Lbs";
+        if (eggBasket[egg].weight === 5) {
+          eggDiv.classList.add("blue-egg");
+          eggDiv.classList.remove("green-egg");
+        } else {
+          eggDiv.classList.add("green-egg");
+          eggDiv.classList.remove("blue-egg");
+        }
+        eggBasketDiv.appendChild(eggDiv);
+        eggDiv.append(eggTitleSpan);
+        eggTitleSpan.appendChild(eggWeightPTag);
+      }
+
+      console.log(eggBasket);
+
+      console.log("test", document.contains(shuffleBasket)); // this is true
+    </script>
+  </body>
+</html>
